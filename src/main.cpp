@@ -2,15 +2,17 @@
 #include <imgui-SFML.h>
 #include <imgui.h>
 
+#include "../include/CursorManager.h"
 #include "../include/Globals.h"
 #include "../include/Map.h"
 #include "../include/MapPoint.h"
 #include "../include/Physics.h"
 
 int main() {
-    auto window = sf::RenderWindow({1920u, 1080u}, "Dijkstra");
-    window.setFramerateLimit(144);
-    if (!ImGui::SFML::Init(window))
+    Globals::window = std::make_unique<sf::RenderWindow>(sf::VideoMode(1920, 1080), "Dijkstra");
+
+    Globals::window->setFramerateLimit(144);
+    if (!ImGui::SFML::Init(*Globals::window))
         return -1;
 
     sf::Clock clock;
@@ -19,26 +21,25 @@ int main() {
     char mapPointNameInput[12] = {"Point"};
 
     Map map;
-    sf::Vector2i mousePos;
 
-    while (window.isOpen()) {
-        mousePos = sf::Mouse::getPosition(window);
+    while (Globals::window->isOpen()) {
+        const sf::Vector2i mousePos = sf::Mouse::getPosition(*Globals::window);
 
         if(physics.getObjects() != map.getMap()) {
             physics.setObjects(map.getMap());
         }
 
-        for (auto event = sf::Event(); window.pollEvent(event);) {
-            ImGui::SFML::ProcessEvent(window, event);
+        for (auto event = sf::Event(); Globals::window->pollEvent(event);) {
+            ImGui::SFML::ProcessEvent(*Globals::window, event);
             map.ProcessEvents(event);
 
             if (event.type == sf::Event::Closed) {
-                window.close();
+                Globals::window->close();
             }
         }
 
         const sf::Time dt = clock.restart();
-        ImGui::SFML::Update(window, dt);
+        ImGui::SFML::Update(*Globals::window, dt);
         physics.update(dt);
 
         ImGui::InputText("Name", reinterpret_cast<char *>(&mapPointNameInput), 12, ImGuiInputTextFlags_AutoSelectAll);
@@ -49,17 +50,25 @@ int main() {
             map.addPoint(newPoint);
         }
 
+        if(ImGui::Button("Create Route")) {
+            CursorManager::getInstance().setCursor(sf::Cursor::Cross);
+        }
+
         ImGui::SliderFloat("Friction Coefficient", &Globals::friction_coefficient, 0.0f, 1.0f);
         ImGui::SliderInt("Physics Sub Steps", &Globals::physic_sub_steps, 1, 50);
 
         ImGui::EndFrame();
-        map.Update(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+        map.Update(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*Globals::window)));
 
-        window.clear(sf::Color::White);
-        window.draw(map);
-        ImGui::SFML::Render(window);
-        window.display();
+        Globals::window->clear(sf::Color::White);
+        Globals::window->draw(map);
+        ImGui::SFML::Render(*Globals::window);
+        Globals::window->display();
     }
 
     ImGui::SFML::Shutdown();
+
+    Globals::window.reset();
+
+    return 0;
 }

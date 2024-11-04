@@ -22,6 +22,9 @@ public:
 
     void ProcessEvents(const sf::Event& e);
 
+    static void HandleRouteSelection(MapPoint* point) ;
+    void HandleDrag(MapPoint* point, const sf::Event& e, int i) ;
+
     ~Map() override;
 
 private:

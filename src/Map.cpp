@@ -4,6 +4,8 @@
 
 #include "../include/Map.h"
 
+#include "../include/Globals.h"
+
 Map::Map() = default;
 
 std::vector<MapPoint *> *Map::getMap() {
@@ -50,17 +52,10 @@ void Map::ProcessEvents(const sf::Event &e) {
         if (e.mouseButton.button == sf::Mouse::Left) {
             for (size_t i = map.size(); i > 0; --i) {
                 MapPoint *point = map[i - 1];
-                if (const auto mousePos = sf::Vector2f(static_cast<float>(e.mouseButton.x),
-                                                       static_cast<float>(e.mouseButton.y));
-                    point->getShape()->getGlobalBounds().contains(mousePos)) {
-                    if (currentDraggedPoint == nullptr) {
-                        point->StartDragging(mousePos);
-                        currentDraggedPoint = point;
-
-                        // Move to front
-                        map.erase(map.begin() + static_cast<long>(i - 1));
-                        map.push_back(currentDraggedPoint);
-                    }
+                if (Globals::is_creating_route) {
+                    HandleRouteSelection(point);
+                } else {
+                    HandleDrag(point, e, static_cast<int>(i));
                 }
             }
         }
@@ -73,6 +68,28 @@ void Map::ProcessEvents(const sf::Event &e) {
     }
 }
 
+void Map::HandleDrag(MapPoint *point, const sf::Event &e, const int i) {
+    if (const auto mousePos = sf::Vector2f(static_cast<float>(e.mouseButton.x),
+                                           static_cast<float>(e.mouseButton.y));
+        point->getShape()->getGlobalBounds().contains(mousePos)) {
+        if (currentDraggedPoint == nullptr) {
+            point->StartDragging(mousePos);
+            currentDraggedPoint = point;
+
+            // Move to front
+            map.erase(map.begin() + (i - 1));
+            map.push_back(currentDraggedPoint);
+        }
+    }
+}
+
+void Map::HandleRouteSelection(MapPoint *point) {
+    if (Globals::route_point_a == nullptr) {
+        Globals::route_point_a = point;
+    } else if (Globals::route_point_b == nullptr) {
+        Globals::route_point_b = point;
+    }
+}
 
 void Map::draw(sf::RenderTarget &target, const sf::RenderStates states) const {
     for (const MapPoint *point: map) {
