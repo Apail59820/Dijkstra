@@ -12,13 +12,13 @@
 
 #include <iostream>
 
-class Point final : public sf::Drawable {
+class MapPoint final : public sf::Drawable {
 public:
-    Point();
+    MapPoint();
 
-    explicit Point(std::string name);
+    explicit MapPoint(std::string name);
 
-    Point(const std::string &name, sf::Vector2f position);
+    MapPoint(const std::string &name, sf::Vector2f position);
 
     void setPosition(sf::Vector2f position);
 
@@ -32,7 +32,7 @@ public:
 
     const sf::CircleShape *getShape() const;
 
-    ~Point() override;
+    ~MapPoint() override;
 
 private:
     void init();
