@@ -1,5 +1,5 @@
 //
-// Created by Amaury Paillart on 04/11/2024.
+// Created by Amaury Paillard on 04/11/2024.
 //
 
 #ifndef FONTMANAGER_H
@@ -22,5 +22,6 @@ private:
     FontManager() = default;
     std::unordered_map<std::string, sf::Font> fonts;
 };
+
 
 #endif //FONTMANAGER_H

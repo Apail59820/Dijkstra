@@ -1,3 +1,7 @@
+//
+// Created by Amaury Paillard on 04/11/2024.
+//
+
 #ifndef POINT_H
 #define POINT_H
 
@@ -46,4 +50,4 @@ private:
     sf::Vector2f dragOffset;
 };
 
-#endif // POINT_H
+#endif //POINT_H

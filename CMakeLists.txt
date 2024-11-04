@@ -1,52 +1,49 @@
-cmake_minimum_required(VERSION 3.11)
-project(Dijkstra)
+cmake_minimum_required(VERSION 3.28)
+project(Dijkstra LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
-
-set(SFML_VERSION 2.6.1)
-set(IMGUI_VERSION 1.89.9)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 include(FetchContent)
 
-cmake_policy(SET CMP0153 NEW)
+FetchContent_Declare(SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 2.6.x
+    GIT_SHALLOW ON
+    EXCLUDE_FROM_ALL
+    SYSTEM)
+FetchContent_MakeAvailable(SFML)
 
-set(SFML_DIR "/opt/homebrew/opt/sfml/lib/cmake/SFML")
-set(SFML_STATIC_LIBRARIES TRUE)
+FetchContent_Declare(ImGui
+    GIT_REPOSITORY https://github.com/ocornut/imgui
+    GIT_TAG v1.89.9
+    GIT_SHALLOW ON
+    EXCLUDE_FROM_ALL
+    SYSTEM)
+FetchContent_MakeAvailable(ImGui)
+FetchContent_GetProperties(ImGui SOURCE_DIR IMGUI_DIR)
 
+set(IMGUI_SFML_FIND_SFML OFF)
+FetchContent_Declare(ImGui-SFML
+    GIT_REPOSITORY https://github.com/SFML/imgui-sfml
+    GIT_TAG 2.6.x
+    GIT_SHALLOW ON
+    EXCLUDE_FROM_ALL
+    SYSTEM)
+FetchContent_MakeAvailable(ImGui-SFML)
 
-find_package(SFML ${SFML_VERSION} REQUIRED COMPONENTS graphics window system)
+add_executable(main src/main.cpp
+        include/FontManager.h
+        src/FontManager.cpp
+        include/Point.h
+        src/Point.cpp)
+target_link_libraries(main PRIVATE sfml-graphics ImGui-SFML::ImGui-SFML)
+target_compile_features(main PRIVATE cxx_std_17)
 
-FetchContent_Declare(
-        imgui
-        GIT_REPOSITORY "https://github.com/ocornut/imgui.git"
-        GIT_TAG "v${IMGUI_VERSION}"
-        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-)
-
-FetchContent_Declare(
-        imgui-sfml
-        GIT_REPOSITORY "https://github.com/SFML/imgui-sfml.git"
-        GIT_TAG "v2.6"
-        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-)
-
-set(IMGUI_DIR imgui)
-
-FetchContent_MakeAvailable(imgui)
-FetchContent_MakeAvailable(imgui-sfml)
-
-add_executable(Dijkstra main.cpp
-        Include/Point.h
-        Source/Point.cpp
-        Include/FontManager.h
-        Source/FontManager.cpp
-)
-
-target_link_libraries(Dijkstra
-        PUBLIC
-        sfml-system
-        sfml-window
-        sfml-graphics
-        ImGui-SFML::ImGui-SFML
-)
-
+if(WIN32)
+    add_custom_command(
+        TARGET main
+        COMMENT "Copy OpenAL DLL"
+        PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:main>
+        VERBATIM)
+endif()
