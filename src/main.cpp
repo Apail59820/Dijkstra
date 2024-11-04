@@ -33,9 +33,7 @@ int main() {
         ImGui::SFML::Update(window, clock.restart());
 
         ImGui::InputText("Name", reinterpret_cast<char *>(&mapPointNameInput), 12, ImGuiInputTextFlags_AutoSelectAll);
-
-        std::cout << mapPointNameInput << std::endl;
-
+        
         if (ImGui::Button("Add Point")) {
             MapPoint newPoint(mapPointNameInput,
                               sf::Vector2f(static_cast<float>(mousePos.x) - 100, static_cast<float>(mousePos.y)));
