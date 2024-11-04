@@ -34,7 +34,7 @@
 # JetBrains
 
 .idea
-
+.DS_Store
 # Debug
 
 cmake-build-debug
