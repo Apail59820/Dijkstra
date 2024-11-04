@@ -8,7 +8,7 @@
 
 #include "MapPoint.h"
 
-class Map : public sf::Drawable {
+class Map final : public sf::Drawable {
 public:
     Map();
 
@@ -20,7 +20,7 @@ public:
 
     void Update(sf::Vector2f mousePos) const;
 
-    void ProcessEvents(sf::Event& e);
+    void ProcessEvents(const sf::Event& e);
 
     ~Map() override;
 

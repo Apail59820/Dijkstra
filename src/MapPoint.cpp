@@ -9,6 +9,8 @@
 #include <__filesystem/operations.h>
 #include <__filesystem/path.h>
 
+#include "../include/Globals.h"
+
 void MapPoint::init() {
     circle.setRadius(20.0f);
     circle.setOrigin(circle.getRadius(), circle.getRadius());
@@ -47,7 +49,6 @@ void MapPoint::setPosition(const sf::Vector2f position) {
 void MapPoint::LoadTextName() {
     nameText.setString(name);
     std::filesystem::path path = std::filesystem::current_path();
-    std::cout << path << std::endl;
     nameText.setFont(FontManager::getInstance().getFont("../../resources/fonts/Poppins-Regular.ttf"));
     nameText.setCharacterSize(24);
     nameText.setFillColor(sf::Color::Black);
@@ -89,6 +90,19 @@ const sf::CircleShape *MapPoint::getShape() const {
 void MapPoint::draw(sf::RenderTarget &target, const sf::RenderStates states) const {
     target.draw(circle, states);
     target.draw(nameText, states);
+}
+
+void MapPoint::setPos(const sf::Vector2f &position) {
+    circle.setPosition(position);
+    nameText.setPosition(position);
+}
+
+void MapPoint::applyFriction() {
+    velocity *= Globals::friction_coefficient;
+}
+
+void MapPoint::move(const float dt) {
+    setPos(getPosition() + velocity * dt);
 }
 
 MapPoint::~MapPoint() = default;

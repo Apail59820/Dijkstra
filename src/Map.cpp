@@ -39,13 +39,13 @@ void Map::setMap(const std::vector<MapPoint *> *map) {
     this->map = *map;
 }
 
-void Map::Update(sf::Vector2f mousePos) const {
+void Map::Update(const sf::Vector2f mousePos) const {
     for (MapPoint *point: map) {
         point->Update(mousePos);
     }
 }
 
-void Map::ProcessEvents(sf::Event &e) {
+void Map::ProcessEvents(const sf::Event &e) {
     if (e.type == sf::Event::MouseButtonPressed) {
         if (e.mouseButton.button == sf::Mouse::Left) {
             for (size_t i = map.size(); i > 0; --i) {

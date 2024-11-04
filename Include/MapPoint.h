@@ -14,6 +14,8 @@
 
 class MapPoint final : public sf::Drawable {
 public:
+    sf::Vector2f velocity{0.f, 0.f};
+
     MapPoint();
 
     explicit MapPoint(std::string name);
@@ -31,6 +33,12 @@ public:
     void StopDragging();
 
     const sf::CircleShape *getShape() const;
+
+    void setPos(const sf::Vector2f &position);
+
+    void applyFriction();
+
+    void move(float dt);
 
     ~MapPoint() override;
 
