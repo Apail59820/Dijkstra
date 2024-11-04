@@ -48,12 +48,19 @@ void Map::Update(sf::Vector2f mousePos) const {
 void Map::ProcessEvents(sf::Event &e) {
     if (e.type == sf::Event::MouseButtonPressed) {
         if (e.mouseButton.button == sf::Mouse::Left) {
-            for (MapPoint *point: map) {
+            for (size_t i = map.size(); i > 0; --i) {
+                MapPoint *point = map[i - 1];
                 if (const auto mousePos = sf::Vector2f(static_cast<float>(e.mouseButton.x),
-                                                       static_cast<float>(e.mouseButton.y)); point->getShape()->
-                    getGlobalBounds().contains(mousePos)) {
-                    point->StartDragging(mousePos);
-                    currentDraggedPoint = point;
+                                                       static_cast<float>(e.mouseButton.y));
+                    point->getShape()->getGlobalBounds().contains(mousePos)) {
+                    if (currentDraggedPoint == nullptr) {
+                        point->StartDragging(mousePos);
+                        currentDraggedPoint = point;
+
+                        // Move to front
+                        map.erase(map.begin() + static_cast<long>(i - 1));
+                        map.push_back(currentDraggedPoint);
+                    }
                 }
             }
         }
