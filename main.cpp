@@ -9,6 +9,8 @@ int main() {
         while (window.pollEvent(event))
             if (event.type == sf::Event::Closed)
                 window.close();
+        window.clear(sf::Color::White);
+        window.display();
     }
     return 0;
 }
