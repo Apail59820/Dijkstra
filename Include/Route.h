@@ -24,6 +24,9 @@ private:
     MapPoint*startPoint = nullptr;
     MapPoint*endPoint = nullptr;
 
+    float distance  = .0f;
+    sf::Text distanceText;
+
     sf::VertexArray route;
 };
 #endif //ROUTE_H

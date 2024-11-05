@@ -20,8 +20,9 @@ public:
 
     void update(sf::Time time) const;
 
-private:
     static float get_distance(sf::Vector2f a, sf::Vector2f b);
+
+private:
 
     static bool is_overlapping(const MapPoint &object1, const MapPoint &object2);
 

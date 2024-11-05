@@ -66,6 +66,7 @@ int main() {
         ImGui::SliderFloat("Friction Coefficient", &Globals::friction_coefficient, 0.0f, 1.0f);
         ImGui::SliderInt("Physics Sub Steps", &Globals::physic_sub_steps, 1, 50);
         ImGui::Text("Routes : %i", Globals::route_amount);
+        ImGui::Checkbox("Show Distances", &Globals::show_distances);
 
         ImGui::EndFrame();
         map.Update(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*Globals::window)));
