@@ -5,6 +5,7 @@
 #include "../include/Map.h"
 
 #include "../include/Globals.h"
+#include "../include/Utils.h"
 
 Map::Map() = default;
 
@@ -74,6 +75,14 @@ void Map::ProcessEvents(const sf::Event &e) {
 void Map::HandleLeftClick(const sf::Event &e) {
     const sf::Vector2f mousePos = GetMousePosition(e);
 
+    if (Globals::is_adding_point) {
+        const MapPoint newPoint(Globals::auto_name
+                                    ? Utils::generateName(static_cast<int>(Globals::map->getMap()->size()))
+                                    : Globals::mapPointNameInput, mousePos);
+
+        Globals::map->addPoint(newPoint);
+    }
+
     for (size_t i = map.size(); i > 0; --i) {
         if (MapPoint *point = map[i - 1]; Globals::is_creating_route && PointInRange(mousePos, point)) {
             HandleRouteSelectionA(point);
@@ -86,6 +95,16 @@ void Map::HandleLeftClick(const sf::Event &e) {
 
 void Map::HandleRightClick(const sf::Event &e) const {
     const sf::Vector2f mousePos = GetMousePosition(e);
+
+    if(Globals::is_creating_route) {
+        Globals::route_point_a = nullptr;
+        Globals::route_point_b = nullptr;
+        Globals::is_creating_route = false;
+    }
+
+    if(Globals::is_adding_point) {
+        Globals::is_adding_point = false;
+    }
 
     for (size_t i = map.size(); i > 0; --i) {
         MapPoint *point = map[i - 1];

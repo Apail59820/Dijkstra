@@ -10,10 +10,7 @@ public:
     Gui();
     ~Gui();
 
-    void Render();
-
-private:
-    char mapPointNameInput[12] = {"Point"};
+    static void Render();
 };
 
 #endif //GUI_H

@@ -15,8 +15,6 @@ int main() {
     Globals::map = std::make_unique<Map>();
     Globals::physics = std::make_unique<Physics>();
 
-    Gui Menu;
-
     Globals::window->setFramerateLimit(144);
     if (!ImGui::SFML::Init(*Globals::window))
         return -1;
@@ -46,7 +44,7 @@ int main() {
             CursorManager::getInstance().setCursor(sf::Cursor::Cross);
         }
 
-        Menu.Render();
+        Gui::Render();
 
         ImGui::EndFrame();
 

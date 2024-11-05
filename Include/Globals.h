@@ -16,6 +16,7 @@ namespace Globals {
     inline bool is_creating_route = false;
     inline bool is_creating_start_point = false;
     inline bool is_creating_end_point = false;
+    inline bool is_adding_point = false;
 
     inline MapPoint* route_point_a = nullptr;
     inline MapPoint* route_point_b = nullptr;
@@ -26,8 +27,11 @@ namespace Globals {
     inline std::unique_ptr<Physics> physics;
 
     inline unsigned int route_amount = 0;
+    inline bool auto_name = true;
 
     inline bool show_distances = true;
+
+    inline char mapPointNameInput[12] = {"Point"};
 }
 
 #endif //GLOBALS_H

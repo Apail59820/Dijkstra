@@ -11,25 +11,34 @@
 #include "../include/Globals.h"
 
 Gui::Gui() = default;
+
 Gui::~Gui() = default;
 
 
-
 void Gui::Render() {
-    const sf::Vector2i mousePos = sf::Mouse::getPosition(*Globals::window);
 
-    ImGui::InputText("Name", reinterpret_cast<char *>(&mapPointNameInput), 12, ImGuiInputTextFlags_AutoSelectAll);
+    ImGui::InputText("Name", reinterpret_cast<char *>(&Globals::mapPointNameInput), 12,
+                     Globals::is_adding_point ? ImGuiInputTextFlags_ReadOnly : ImGuiInputTextFlags_AutoSelectAll);
+    ImGui::SameLine();
+    ImGui::Checkbox("Auto name", &Globals::auto_name);
 
     if (ImGui::Button("Add Point")) {
-        const MapPoint newPoint(mapPointNameInput,
-                                sf::Vector2f(static_cast<float>(mousePos.x) - 100, static_cast<float>(mousePos.y)));
-        Globals::map->addPoint(newPoint);
+        Globals::is_creating_end_point = false;
+        Globals::is_creating_start_point = false;
+
+        if(Globals::is_creating_route && Globals::route_point_a != nullptr) {
+            Globals::route_manager->CancelRouteCreation();
+            Globals::is_creating_route = false;
+        }
+
+        Globals::is_adding_point = true;
     }
 
-    if(ImGui::Button("Create Route")) {
+    if (ImGui::Button("Create Route")) {
         Globals::is_creating_route = true;
         Globals::is_creating_end_point = false;
         Globals::is_creating_start_point = false;
+        Globals::is_adding_point = false;
     }
 
     ImGui::SliderFloat("Friction Coefficient", &Globals::friction_coefficient, 0.0f, 1.0f);
@@ -37,29 +46,27 @@ void Gui::Render() {
     ImGui::Text("Routes : %i", Globals::route_amount);
     ImGui::Checkbox("Show Distances", &Globals::show_distances);
 
-    if(ImGui::Button("Set Start Point")) {
+    if (ImGui::Button("Set Start Point")) {
         Globals::is_creating_route = false;
         Globals::is_creating_end_point = false;
         Globals::is_creating_start_point = true;
+        Globals::is_adding_point = false;
     }
 
     ImGui::SameLine();
 
-    if(ImGui::Button("Set End Point")) {
+    if (ImGui::Button("Set End Point")) {
         Globals::is_creating_route = false;
         Globals::is_creating_start_point = false;
         Globals::is_creating_end_point = true;
     }
 
-    if(ImGui::Button("Calculate Shortest Point")) {
-        if(const std::vector<MapPoint*> result = DijkstraAlgorithm::findShortestPath(); !result.empty()) {
+    if (ImGui::Button("Calculate Shortest Point")) {
+        if (const std::vector<MapPoint *> result = DijkstraAlgorithm::findShortestPath(); !result.empty()) {
             std::cout << "Shortest Path Length: " << result.size() << std::endl;
-            for(MapPoint* mapPoint : result) {
+            for (MapPoint *mapPoint: result) {
                 mapPoint->setAsPath();
             }
         }
     }
-
 }
-
-

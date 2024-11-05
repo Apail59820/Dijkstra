@@ -14,9 +14,6 @@ RouteManager::RouteManager() : line(sf::VertexArray(sf::LinesStrip, 2)) {
 RouteManager::~RouteManager() = default;
 
 void RouteManager::CancelRouteCreation() {
-    Globals::is_creating_route = false;
-
-    CursorManager::getInstance().setCursor(sf::Cursor::Arrow);
 
     Globals::route_point_a = nullptr;
     Globals::route_point_b = nullptr;
