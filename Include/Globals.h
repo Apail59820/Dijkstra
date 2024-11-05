@@ -4,7 +4,9 @@
 
 #ifndef GLOBALS_H
 #define GLOBALS_H
+#include "Map.h"
 #include "MapPoint.h"
+#include "Physics.h"
 #include "RouteManager.h"
 
 namespace Globals {
@@ -20,6 +22,8 @@ namespace Globals {
 
     inline std::unique_ptr<sf::RenderWindow> window;
     inline std::unique_ptr<RouteManager> route_manager;
+    inline std::unique_ptr<Map> map;
+    inline std::unique_ptr<Physics> physics;
 
     inline unsigned int route_amount = 0;
 
