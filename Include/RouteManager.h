@@ -20,7 +20,7 @@ public:
 
     void DrawRoutes() const;
 
-    [[nodiscard]] const std::vector<Route>* GetRoutes() const;
+    [[nodiscard]] std::vector<Route>* GetRoutes();
 
     void CancelRouteCreation();
 

@@ -77,6 +77,6 @@ void RouteManager::DrawRoutes() const {
     }
 }
 
-const std::vector<Route> *RouteManager::GetRoutes() const {
+std::vector<Route> *RouteManager::GetRoutes() {
     return &this->routes;
 }

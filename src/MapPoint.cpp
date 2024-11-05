@@ -81,7 +81,10 @@ void MapPoint::Update(const sf::Vector2f &mousePosition) {
             circle.setFillColor(sf::Color::Green);
         } else if (isEndPoint) {
             circle.setFillColor(sf::Color::Yellow);
-        } else {
+        } else if(isPath) {
+            circle.setFillColor(sf::Color::Magenta);
+        }
+        else {
             circle.setFillColor(sf::Color::White);
         }
     }
@@ -169,6 +172,14 @@ bool MapPoint::getIsStartPoint() const {
 
 bool MapPoint::getIsEndPoint() const {
     return isEndPoint;
+}
+
+std::string MapPoint::getName() const {
+    return name;
+}
+
+void MapPoint::setAsPath() {
+    isPath = true;
 }
 
 MapPoint::~MapPoint() = default;

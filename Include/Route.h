@@ -17,6 +17,14 @@ public:
 
     bool isEqual(const MapPoint* A, const MapPoint* B) const;
 
+    MapPoint* getStartPoint() const;
+    MapPoint* getEndPoint() const;
+    MapPoint* getEdge(const MapPoint* otherEdge) const;
+
+    float getDistance() const;
+
+    void setIsPath(bool bState);
+
 private:
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -26,6 +34,8 @@ private:
 
     float distance  = .0f;
     sf::Text distanceText;
+
+    bool isPath = false;
 
     sf::VertexArray route;
 };

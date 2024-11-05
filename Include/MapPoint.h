@@ -52,6 +52,10 @@ public:
 
     bool getIsEndPoint() const;
 
+    std::string getName() const;
+
+    void setAsPath();
+
     ~MapPoint() override;
 
 private:
@@ -70,6 +74,7 @@ private:
     bool isHovered = false;
     bool isStartPoint = false;
     bool isEndPoint = false;
+    bool isPath = false;
 
     sf::Vector2f dragOffset;
 };

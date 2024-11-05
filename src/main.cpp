@@ -47,7 +47,7 @@ int main() {
         }
 
         Menu.Render();
-        
+
         ImGui::EndFrame();
 
         Globals::map->Update(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*Globals::window)));

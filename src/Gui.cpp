@@ -6,6 +6,7 @@
 #include <imgui-SFML.h>
 #include <imgui.h>
 
+#include "../include/DijkstraAlgorithm.h"
 #include "../include/MapPoint.h"
 #include "../include/Globals.h"
 
@@ -49,6 +50,16 @@ void Gui::Render() {
         Globals::is_creating_start_point = false;
         Globals::is_creating_end_point = true;
     }
+
+    if(ImGui::Button("Calculate Shortest Point")) {
+        if(const std::vector<MapPoint*> result = DijkstraAlgorithm::findShortestPath(); !result.empty()) {
+            std::cout << "Shortest Path Length: " << result.size() << std::endl;
+            for(MapPoint* mapPoint : result) {
+                mapPoint->setAsPath();
+            }
+        }
+    }
+
 }
 
 
