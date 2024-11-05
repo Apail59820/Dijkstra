@@ -24,8 +24,8 @@ void Map::addPoint(const MapPoint &point) {
 }
 
 void Map::removePoint(const MapPoint *point) {
-    auto it = std::remove_if(map.begin(), map.end(),
-                             [point](const MapPoint *p) { return p == point; });
+    const auto it = std::remove_if(map.begin(), map.end(),
+                                   [point](const MapPoint *p) { return p == point; });
 
     for (auto iter = it; iter != map.end(); ++iter) {
         delete *iter;
