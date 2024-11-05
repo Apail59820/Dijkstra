@@ -9,6 +9,7 @@
 #include <__filesystem/operations.h>
 #include <__filesystem/path.h>
 
+#include "../include/CursorManager.h"
 #include "../include/Globals.h"
 
 void MapPoint::init() {
@@ -71,6 +72,18 @@ void MapPoint::Update(const sf::Vector2f &mousePosition) {
         setPosition(mousePosition);
         LoadTextName();
     }
+
+    if (isHovered) {
+        if (!Globals::is_creating_route) {
+            CursorManager::getInstance().setCursor(sf::Cursor::Hand);
+        }
+        circle.setFillColor(sf::Color(43, 255, 255));
+    } else {
+        if (!Globals::is_creating_route) {
+            CursorManager::getInstance().setCursor(sf::Cursor::Arrow);
+        }
+        circle.setFillColor(sf::Color::White);
+    }
 }
 
 void MapPoint::StartDragging(const sf::Vector2f &mousePosition) {
@@ -103,6 +116,14 @@ void MapPoint::applyFriction() {
 
 void MapPoint::move(const float dt) {
     setPos(getPosition() + velocity * dt);
+}
+
+void MapPoint::setIsHovered(const bool hoverState) {
+    isHovered = hoverState;
+}
+
+bool MapPoint::getIsHovered() const {
+    return isHovered;
 }
 
 MapPoint::~MapPoint() = default;

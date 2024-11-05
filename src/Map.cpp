@@ -44,6 +44,13 @@ void Map::setMap(const std::vector<MapPoint *> *map) {
 void Map::Update(const sf::Vector2f mousePos) const {
     for (MapPoint *point: map) {
         point->Update(mousePos);
+        if (PointInRange(mousePos, point)) {
+            point->setIsHovered(true);
+        } else {
+            if (point->getIsHovered()) {
+                point->setIsHovered(false);
+            }
+        }
     }
 }
 
@@ -73,9 +80,11 @@ void Map::ProcessEvents(const sf::Event &e) {
                                                    static_cast<float>(e.mouseButton.y));
                 for (size_t i = map.size(); i > 0; --i) {
                     if (MapPoint *point = map[i - 1]; Globals::is_creating_route && PointInRange(mousePos, point)) {
-                        HandleRouteSelectionB(point);
+                        return HandleRouteSelectionB(point);
                     }
                 }
+
+                Globals::route_manager->CancelRouteCreation();
             }
 
             if (!Globals::is_creating_route && currentDraggedPoint != nullptr) {
@@ -118,6 +127,7 @@ void Map::draw(sf::RenderTarget &target, const sf::RenderStates states) const {
         target.draw(*point, states);
     }
 }
+
 
 Map::~Map() {
     this->cleanupMap();

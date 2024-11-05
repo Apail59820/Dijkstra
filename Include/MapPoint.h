@@ -40,6 +40,9 @@ public:
 
     void move(float dt);
 
+    void setIsHovered(bool hoverState);
+    bool getIsHovered() const;
+
     ~MapPoint() override;
 
 private:
@@ -55,6 +58,8 @@ private:
     sf::FloatRect nameTextLocalBounds;
 
     bool isDragging = false;
+    bool isHovered = false;
+
     sf::Vector2f dragOffset;
 };
 

@@ -46,6 +46,10 @@ int main() {
         Globals::route_manager->UpdateRoute();
         physics.update(dt);
 
+        if(Globals::is_creating_route) {
+            CursorManager::getInstance().setCursor(sf::Cursor::Cross);
+        }
+
         ImGui::InputText("Name", reinterpret_cast<char *>(&mapPointNameInput), 12, ImGuiInputTextFlags_AutoSelectAll);
 
         if (ImGui::Button("Add Point")) {

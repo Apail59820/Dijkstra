@@ -22,10 +22,10 @@ public:
 
     [[nodiscard]] const std::vector<Route>* GetRoutes() const;
 
+    void CancelRouteCreation();
+
 private:
     sf::VertexArray line;
-
-    void CancelRouteCreation();
 
     std::vector<Route> routes;
 };
