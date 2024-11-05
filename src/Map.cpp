@@ -85,20 +85,31 @@ void Map::HandleLeftClick(const sf::Event &e) {
 }
 
 void Map::HandleRightClick(const sf::Event &e) const {
-
     const sf::Vector2f mousePos = GetMousePosition(e);
 
     for (size_t i = map.size(); i > 0; --i) {
         MapPoint *point = map[i - 1];
         if (Globals::is_creating_start_point && PointInRange(mousePos, point)) {
-            if(hasStartPoint()) return;
+            if (hasStartPoint()) {
+                for (MapPoint *p: map) {
+                    if (p->getIsStartPoint()) {
+                        p->setIsStartPoint(false);
+                    }
+                }
+            }
             point->setIsStartPoint(true);
             Globals::is_creating_start_point = false;
             return;
         }
 
         if (Globals::is_creating_end_point && PointInRange(mousePos, point)) {
-            if(hasEndPoint()) return;
+            if (hasEndPoint()) {
+                for (MapPoint *p: map) {
+                    if (p->getIsEndPoint()) {
+                        p->setIsEndPoint(false);
+                    }
+                }
+            }
             point->setIsEndPoint(true);
             Globals::is_creating_end_point = false;
             return;
