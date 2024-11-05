@@ -11,6 +11,9 @@
 int main() {
     Globals::window = std::make_unique<sf::RenderWindow>(sf::VideoMode(1920, 1080), "Dijkstra");
 
+    RouteManager routeManager;
+    Globals::route_manager = std::make_unique<RouteManager>(routeManager);
+
     Globals::window->setFramerateLimit(144);
     if (!ImGui::SFML::Init(*Globals::window))
         return -1;
@@ -40,6 +43,7 @@ int main() {
 
         const sf::Time dt = clock.restart();
         ImGui::SFML::Update(*Globals::window, dt);
+        Globals::route_manager->UpdateRoute();
         physics.update(dt);
 
         ImGui::InputText("Name", reinterpret_cast<char *>(&mapPointNameInput), 12, ImGuiInputTextFlags_AutoSelectAll);
@@ -52,22 +56,27 @@ int main() {
 
         if(ImGui::Button("Create Route")) {
             CursorManager::getInstance().setCursor(sf::Cursor::Cross);
+            Globals::is_creating_route = true;
         }
 
         ImGui::SliderFloat("Friction Coefficient", &Globals::friction_coefficient, 0.0f, 1.0f);
         ImGui::SliderInt("Physics Sub Steps", &Globals::physic_sub_steps, 1, 50);
+        ImGui::Text("Routes : %i", Globals::route_amount);
 
         ImGui::EndFrame();
         map.Update(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*Globals::window)));
 
         Globals::window->clear(sf::Color::White);
+
+        Globals::route_manager->DrawRoutes();
         Globals::window->draw(map);
+
         ImGui::SFML::Render(*Globals::window);
         Globals::window->display();
+
     }
 
     ImGui::SFML::Shutdown();
-
     Globals::window.reset();
 
     return 0;

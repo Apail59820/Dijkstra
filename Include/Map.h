@@ -22,7 +22,6 @@ public:
 
     void ProcessEvents(const sf::Event& e);
 
-    static void HandleRouteSelection(MapPoint* point) ;
     void HandleDrag(MapPoint* point, const sf::Event& e, int i) ;
 
     ~Map() override;
@@ -30,6 +29,11 @@ public:
 private:
 
     void cleanupMap();
+
+    static void HandleRouteSelectionA(MapPoint* point) ;
+    static void HandleRouteSelectionB(MapPoint* point) ;
+
+    static bool PointInRange(sf::Vector2f mousePos, const MapPoint *point);
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 

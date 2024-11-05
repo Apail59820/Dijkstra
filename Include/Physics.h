@@ -31,7 +31,7 @@ private:
 
     void update_physics(float dt) const;
 
-    std::vector<MapPoint *>* objects;
+    std::vector<MapPoint *>* objects{};
 };
 
 #endif //PHYSICS_H

@@ -13,7 +13,7 @@ std::vector<MapPoint *> *Map::getMap() {
 }
 
 void Map::cleanupMap() {
-    for (MapPoint *point: map) {
+    for (const MapPoint *point: map) {
         delete point;
     }
     map.clear();
@@ -47,13 +47,19 @@ void Map::Update(const sf::Vector2f mousePos) const {
     }
 }
 
+
+bool Map::PointInRange(const sf::Vector2f mousePos, const MapPoint *point) {
+    return point->getShape()->getGlobalBounds().contains(mousePos);
+}
+
 void Map::ProcessEvents(const sf::Event &e) {
     if (e.type == sf::Event::MouseButtonPressed) {
         if (e.mouseButton.button == sf::Mouse::Left) {
+            const auto mousePos = sf::Vector2f(static_cast<float>(e.mouseButton.x),
+                                               static_cast<float>(e.mouseButton.y));
             for (size_t i = map.size(); i > 0; --i) {
-                MapPoint *point = map[i - 1];
-                if (Globals::is_creating_route) {
-                    HandleRouteSelection(point);
+                if (MapPoint *point = map[i - 1]; Globals::is_creating_route && PointInRange(mousePos, point)) {
+                    HandleRouteSelectionA(point);
                 } else {
                     HandleDrag(point, e, static_cast<int>(i));
                 }
@@ -61,17 +67,29 @@ void Map::ProcessEvents(const sf::Event &e) {
         }
     }
     if (e.type == sf::Event::MouseButtonReleased) {
-        if (e.mouseButton.button == sf::Mouse::Left && currentDraggedPoint != nullptr) {
-            currentDraggedPoint->StopDragging();
-            currentDraggedPoint = nullptr;
+        if (e.mouseButton.button == sf::Mouse::Left) {
+            if (Globals::is_creating_route) {
+                const auto mousePos = sf::Vector2f(static_cast<float>(e.mouseButton.x),
+                                                   static_cast<float>(e.mouseButton.y));
+                for (size_t i = map.size(); i > 0; --i) {
+                    if (MapPoint *point = map[i - 1]; Globals::is_creating_route && PointInRange(mousePos, point)) {
+                        HandleRouteSelectionB(point);
+                    }
+                }
+            }
+
+            if (!Globals::is_creating_route && currentDraggedPoint != nullptr) {
+                currentDraggedPoint->StopDragging();
+                currentDraggedPoint = nullptr;
+            }
         }
     }
 }
 
 void Map::HandleDrag(MapPoint *point, const sf::Event &e, const int i) {
-    if (const auto mousePos = sf::Vector2f(static_cast<float>(e.mouseButton.x),
-                                           static_cast<float>(e.mouseButton.y));
-        point->getShape()->getGlobalBounds().contains(mousePos)) {
+    const auto mousePos = sf::Vector2f(static_cast<float>(e.mouseButton.x),
+                                       static_cast<float>(e.mouseButton.y));
+    if (PointInRange(mousePos, point)) {
         if (currentDraggedPoint == nullptr) {
             point->StartDragging(mousePos);
             currentDraggedPoint = point;
@@ -83,11 +101,15 @@ void Map::HandleDrag(MapPoint *point, const sf::Event &e, const int i) {
     }
 }
 
-void Map::HandleRouteSelection(MapPoint *point) {
+void Map::HandleRouteSelectionA(MapPoint *point) {
     if (Globals::route_point_a == nullptr) {
-        Globals::route_point_a = point;
-    } else if (Globals::route_point_b == nullptr) {
-        Globals::route_point_b = point;
+        Globals::route_manager->DrawPointA(point);
+    }
+}
+
+void Map::HandleRouteSelectionB(MapPoint *point) {
+    if (Globals::route_point_b == nullptr) {
+        Globals::route_manager->DrawPointB(point);
     }
 }
 
