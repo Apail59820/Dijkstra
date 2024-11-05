@@ -54,15 +54,8 @@ void MapPoint::LoadTextName() {
     nameText.setCharacterSize(24);
     nameText.setFillColor(sf::Color::Black);
 
-    nameTextLocalBounds = nameText.getLocalBounds();
-    nameText.setOrigin(nameTextLocalBounds.left + nameTextLocalBounds.width / 2.0f,
-                       nameTextLocalBounds.top + nameTextLocalBounds.height / 2.0f);
 
-    const float textWidth = nameTextLocalBounds.width;
-
-    const float newRadius = std::max(textWidth / 2.0f + 10.0f, circle.getRadius());
-    circle.setRadius(newRadius);
-    circle.setOrigin(newRadius, newRadius);
+    AdjustRadiusForText();
 
     nameText.setPosition(circle.getPosition().x, circle.getPosition().y);
 }
@@ -73,16 +66,24 @@ void MapPoint::Update(const sf::Vector2f &mousePosition) {
         LoadTextName();
     }
 
+
     if (isHovered) {
         if (!Globals::is_creating_route) {
             CursorManager::getInstance().setCursor(sf::Cursor::Hand);
         }
-        circle.setFillColor(sf::Color(43, 255, 255));
+        circle.setFillColor(sf::Color::Cyan);
     } else {
         if (!Globals::is_creating_route) {
             CursorManager::getInstance().setCursor(sf::Cursor::Arrow);
         }
-        circle.setFillColor(sf::Color::White);
+
+        if (isStartPoint) {
+            circle.setFillColor(sf::Color::Green);
+        } else if (isEndPoint) {
+            circle.setFillColor(sf::Color::Yellow);
+        } else {
+            circle.setFillColor(sf::Color::White);
+        }
     }
 }
 
@@ -124,6 +125,46 @@ void MapPoint::setIsHovered(const bool hoverState) {
 
 bool MapPoint::getIsHovered() const {
     return isHovered;
+}
+
+void MapPoint::setIsStartPoint(const bool bState) {
+    isStartPoint = bState;
+    if (bState) {
+        circle.setPointCount(6);
+    } else {
+        circle.setPointCount(30);
+    }
+
+    AdjustRadiusForText();
+}
+
+void MapPoint::setIsEndPoint(const bool bState) {
+    isEndPoint = bState;
+    if (bState) {
+        circle.setPointCount(4);
+    } else {
+        circle.setPointCount(30);
+    }
+
+    AdjustRadiusForText();
+}
+
+void MapPoint::AdjustRadiusForText() {
+    nameTextLocalBounds = nameText.getLocalBounds();
+    const float textWidth = nameTextLocalBounds.width;
+
+    const float newRadius = std::max(textWidth / 2.0f + 10.0f, circle.getRadius());
+
+    circle.setRadius(newRadius);
+    circle.setOrigin(newRadius, newRadius);
+
+    nameText.setOrigin(nameTextLocalBounds.left + nameTextLocalBounds.width / 2.0f,
+                       nameTextLocalBounds.top + nameTextLocalBounds.height / 2.0f);
+    nameText.setPosition(circle.getPosition());
+}
+
+bool MapPoint::getIsEndPoint() const {
+    return isEndPoint;
 }
 
 MapPoint::~MapPoint() = default;

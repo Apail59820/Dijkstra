@@ -59,14 +59,29 @@ int main() {
         }
 
         if(ImGui::Button("Create Route")) {
-            CursorManager::getInstance().setCursor(sf::Cursor::Cross);
             Globals::is_creating_route = true;
+            Globals::is_creating_end_point = false;
+            Globals::is_creating_start_point = false;
         }
 
         ImGui::SliderFloat("Friction Coefficient", &Globals::friction_coefficient, 0.0f, 1.0f);
         ImGui::SliderInt("Physics Sub Steps", &Globals::physic_sub_steps, 1, 50);
         ImGui::Text("Routes : %i", Globals::route_amount);
         ImGui::Checkbox("Show Distances", &Globals::show_distances);
+
+        if(ImGui::Button("Set Start Point")) {
+            Globals::is_creating_route = false;
+            Globals::is_creating_end_point = false;
+            Globals::is_creating_start_point = true;
+        }
+
+        ImGui::SameLine();
+
+        if(ImGui::Button("Set End Point")) {
+            Globals::is_creating_route = false;
+            Globals::is_creating_start_point = false;
+            Globals::is_creating_end_point = true;
+        }
 
         ImGui::EndFrame();
         map.Update(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*Globals::window)));

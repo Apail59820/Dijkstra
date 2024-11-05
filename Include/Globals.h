@@ -10,7 +10,10 @@
 namespace Globals {
     inline int physic_sub_steps = 12;
     inline float friction_coefficient = 0.845f;
+
     inline bool is_creating_route = false;
+    inline bool is_creating_start_point = false;
+    inline bool is_creating_end_point = false;
 
     inline MapPoint* route_point_a = nullptr;
     inline MapPoint* route_point_b = nullptr;

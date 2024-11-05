@@ -43,6 +43,15 @@ public:
     void setIsHovered(bool hoverState);
     bool getIsHovered() const;
 
+    void setIsStartPoint(bool bState);
+    bool getIsStartPoint() const;
+
+    void setIsEndPoint(bool bState);
+
+    void AdjustRadiusForText();
+
+    bool getIsEndPoint() const;
+
     ~MapPoint() override;
 
 private:
@@ -59,6 +68,8 @@ private:
 
     bool isDragging = false;
     bool isHovered = false;
+    bool isStartPoint = false;
+    bool isEndPoint = false;
 
     sf::Vector2f dragOffset;
 };
