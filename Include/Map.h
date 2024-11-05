@@ -42,6 +42,8 @@ private:
     static sf::Vector2f GetMousePosition(const sf::Event &e);
 
     [[nodiscard]] bool ProcessPointForRoute(const sf::Vector2f &mousePos) const;
+    [[nodiscard]] bool hasStartPoint() const;
+    [[nodiscard]] bool hasEndPoint() const;
 
     void HandleDrag(MapPoint *point, const sf::Event &e, int i);
 

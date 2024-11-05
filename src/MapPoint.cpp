@@ -163,6 +163,10 @@ void MapPoint::AdjustRadiusForText() {
     nameText.setPosition(circle.getPosition());
 }
 
+bool MapPoint::getIsStartPoint() const {
+    return isStartPoint;
+}
+
 bool MapPoint::getIsEndPoint() const {
     return isEndPoint;
 }
