@@ -13,7 +13,7 @@ int main() {
     Globals::route_manager = std::make_unique<RouteManager>();
     Globals::map = std::make_unique<Map>();
     Globals::physics = std::make_unique<Physics>();
-    Globals::notification_manager = std::make_unique<NotificationManager>(FontManager::getInstance().getFont("../../resources/fonts/Poppins-Regular.ttf"));
+    Globals::notification_manager = std::make_unique<NotificationManager>();
 
     Globals::window->setFramerateLimit(144);
     if (!ImGui::SFML::Init(*Globals::window))
