@@ -100,10 +100,12 @@ void Map::HandleRightClick(const sf::Event &e) const {
         Globals::route_point_a = nullptr;
         Globals::route_point_b = nullptr;
         Globals::is_creating_route = false;
+        Globals::notification_manager->addNotification("Mode: \"Create route\" : exited");
     }
 
     if(Globals::is_adding_point) {
         Globals::is_adding_point = false;
+        Globals::notification_manager->addNotification("Mode: \"Add point\" : exited");
     }
 
     for (size_t i = map.size(); i > 0; --i) {
@@ -118,6 +120,7 @@ void Map::HandleRightClick(const sf::Event &e) const {
             }
             point->setIsStartPoint(true);
             Globals::is_creating_start_point = false;
+            Globals::notification_manager->addNotification("Start point set.");
             return;
         }
 
@@ -131,6 +134,7 @@ void Map::HandleRightClick(const sf::Event &e) const {
             }
             point->setIsEndPoint(true);
             Globals::is_creating_end_point = false;
+            Globals::notification_manager->addNotification("End point set.");
             return;
         }
     }

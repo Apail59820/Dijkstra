@@ -32,6 +32,7 @@ void Gui::Render() {
             Globals::is_creating_route = false;
         }
 
+        Globals::notification_manager->addNotification("Mode: \"Add point\"");
         Globals::is_adding_point = true;
     }
 
@@ -40,6 +41,8 @@ void Gui::Render() {
         Globals::is_creating_end_point = false;
         Globals::is_creating_start_point = false;
         Globals::is_adding_point = false;
+
+        Globals::notification_manager->addNotification("Mode: \"Create route\"");
     }
 
     ImGui::SliderFloat("Friction Coefficient", &Globals::friction_coefficient, 0.0f, 1.0f);
@@ -52,6 +55,8 @@ void Gui::Render() {
         Globals::is_creating_end_point = false;
         Globals::is_creating_start_point = true;
         Globals::is_adding_point = false;
+
+        Globals::notification_manager->addNotification("Mode: \"Set start point\"");
     }
 
     ImGui::SameLine();
@@ -60,6 +65,8 @@ void Gui::Render() {
         Globals::is_creating_route = false;
         Globals::is_creating_start_point = false;
         Globals::is_creating_end_point = true;
+
+        Globals::notification_manager->addNotification("Mode: \"Set end point\"");
     }
 
     if (ImGui::Button("Calculate Shortest Point")) {

@@ -73,6 +73,8 @@ void SaveManager::LoadFromFile() {
         }
     }
 
+    Globals::notification_manager->addNotification("Loaded graph !");
+
     
     delete[] saveFile.points;
     delete[] saveFile.routes;
@@ -144,8 +146,6 @@ void SaveManager::SaveToFile() {
 
     saveGraph(saveFile);
 
-    Globals::notification_manager->addNotification("Saved to file !");
-
     delete[] saveFile.points;
     delete[] saveFile.routes;
 }
@@ -167,6 +167,12 @@ void SaveManager::saveGraph(const SAVE_FILE &saveFile) {
 
     for (int i = 0; i < saveFile.routes_count; ++i) {
         outFile.write(reinterpret_cast<const char *>(&saveFile.routes[i]), sizeof(SAVED_ROUTE));
+    }
+
+    if(outFile.good()) {
+        Globals::notification_manager->addNotification("Graph saved successfully !");
+    } else {
+        Globals::notification_manager->addNotification("Error occurred while trying to save graph.");
     }
 
     outFile.close();
