@@ -73,6 +73,7 @@ void SaveManager::LoadFromFile() {
         }
     }
 
+    
     delete[] saveFile.points;
     delete[] saveFile.routes;
 }
