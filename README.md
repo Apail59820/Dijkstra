@@ -10,8 +10,8 @@ visualisation and configuration though a graphic library in C++.
 
 Exit any mode by pressing right-click on a blank zone.
 
-[](/images/demo_nav.gif)
-[](/images/demo_path.gif)
+[](images/demo_nav.gif)
+[](images/demo_path.gif)
 
 ## How to Install
 
