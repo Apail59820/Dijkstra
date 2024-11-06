@@ -21,7 +21,9 @@ void NotificationManager::update(const sf::Time deltaTime) {
 
     notifications.erase(
         std::remove_if(notifications.begin(), notifications.end(),
-                       [](const std::shared_ptr<Notification> &notif) { return notif->isExpired(); }),
+                       [](const std::shared_ptr<Notification> &notification_shared) {
+                           return notification_shared->isExpired();
+                       }),
         notifications.end()
     );
 
