@@ -57,6 +57,7 @@ add_executable(main src/main.cpp
         include/Notification.h
         include/NotificationManager.h
         src/NotificationManager.cpp
+        src/Notification.cpp
 )
 target_link_libraries(main PRIVATE sfml-graphics ImGui-SFML::ImGui-SFML)
 target_compile_features(main PRIVATE cxx_std_17)

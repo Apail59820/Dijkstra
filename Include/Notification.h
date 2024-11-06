@@ -14,43 +14,15 @@
 
 class Notification {
 public:
-    Notification(const std::string& message, const sf::Font& font, const sf::Vector2f position)
-        : duration(sf::seconds(3)), elapsedTime(sf::Time::Zero) {
+    Notification(const std::string& message, const sf::Font& font, sf::Vector2f position);
 
-        text.setFont(font);
-        text.setString(message);
-        text.setCharacterSize(24);
-        text.setFillColor(sf::Color::White);
-        text.setPosition(position);
+    void update(const sf::Time& dt);
 
-        background.setSize(sf::Vector2f(text.getLocalBounds().width + 20, text.getLocalBounds().height + 20));
-        background.setFillColor(sf::Color(0, 0, 0, 180));
-        background.setPosition(position.x - 10, position.y - 10);
-    }
+    bool isExpired() const;
 
-    void update(const sf::Time deltaTime) {
-        elapsedTime += deltaTime;
-        if (elapsedTime < sf::seconds(0.5f)) {
-            const float progress = elapsedTime / sf::seconds(0.5f);
-            const float yOffset = -50.0f * (1 - progress);
-            text.move(0, yOffset);
-            background.move(0, yOffset);
-        }
-    }
+    void setPosition(sf::Vector2f newPosition);
 
-    bool isExpired() const {
-        return elapsedTime >= duration;
-    }
-
-    void setPosition(const sf::Vector2f newPosition) {
-        text.setPosition(newPosition);
-        background.setPosition(newPosition.x - 10, newPosition.y - 10);
-    }
-
-    void draw(sf::RenderWindow& window) const {
-        window.draw(background);
-        window.draw(text);
-    }
+    void draw(sf::RenderWindow &window) const;
 
 private:
     sf::Text text;
