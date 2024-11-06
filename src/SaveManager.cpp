@@ -144,6 +144,8 @@ void SaveManager::SaveToFile() {
 
     saveGraph(saveFile);
 
+    Globals::notification_manager->addNotification("Saved to file !");
+
     delete[] saveFile.points;
     delete[] saveFile.routes;
 }

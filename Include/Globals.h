@@ -6,6 +6,7 @@
 #define GLOBALS_H
 #include "Map.h"
 #include "MapPoint.h"
+#include "NotificationManager.h"
 #include "Physics.h"
 #include "RouteManager.h"
 
@@ -25,6 +26,7 @@ namespace Globals {
     inline std::unique_ptr<RouteManager> route_manager;
     inline std::unique_ptr<Map> map;
     inline std::unique_ptr<Physics> physics;
+    inline std::unique_ptr<NotificationManager> notification_manager;
 
     inline unsigned int route_amount = 0;
     inline bool auto_name = true;

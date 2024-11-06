@@ -10,10 +10,10 @@
 
 int main() {
     Globals::window = std::make_unique<sf::RenderWindow>(sf::VideoMode(1920, 1080), "Dijkstra");
-
     Globals::route_manager = std::make_unique<RouteManager>();
     Globals::map = std::make_unique<Map>();
     Globals::physics = std::make_unique<Physics>();
+    Globals::notification_manager = std::make_unique<NotificationManager>(FontManager::getInstance().getFont("../../resources/fonts/Poppins-Regular.ttf"));
 
     Globals::window->setFramerateLimit(144);
     if (!ImGui::SFML::Init(*Globals::window))
@@ -36,9 +36,11 @@ int main() {
         }
 
         const sf::Time dt = clock.restart();
+
         ImGui::SFML::Update(*Globals::window, dt);
         Globals::route_manager->UpdateRoute();
         Globals::physics->update(dt);
+        Globals::notification_manager->update(dt);
 
         if(Globals::is_creating_route) {
             CursorManager::getInstance().setCursor(sf::Cursor::Cross);
@@ -56,6 +58,9 @@ int main() {
         Globals::window->draw(*Globals::map);
 
         ImGui::SFML::Render(*Globals::window);
+
+        Globals::notification_manager->draw(*Globals::window);
+
         Globals::window->display();
 
     }
