@@ -9,6 +9,7 @@
 #include "../include/DijkstraAlgorithm.h"
 #include "../include/MapPoint.h"
 #include "../include/Globals.h"
+#include "../include/SaveManager.h"
 
 Gui::Gui() = default;
 
@@ -63,10 +64,19 @@ void Gui::Render() {
 
     if (ImGui::Button("Calculate Shortest Point")) {
         if (const std::vector<MapPoint *> result = DijkstraAlgorithm::findShortestPath(); !result.empty()) {
-            std::cout << "Shortest Path Length: " << result.size() << std::endl;
             for (MapPoint *mapPoint: result) {
                 mapPoint->setAsPath();
             }
         }
+    }
+
+    if(ImGui::Button("Save Graph")) {
+        SaveManager::SaveToFile();
+    }
+
+    ImGui::SameLine();
+
+    if (ImGui::Button("Load Graph")) {
+        SaveManager::LoadFromFile();
     }
 }
