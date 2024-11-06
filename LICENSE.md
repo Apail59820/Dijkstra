@@ -1,4 +1,4 @@
-# CMake SFML Project Licenses
+# Dijkstra Project Licenses
 
 
 ## Public Domain
